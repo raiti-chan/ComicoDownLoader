@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.Dialog.AddNameDialog">
+   <children>
+      <TextField fx:id="name" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="270.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="10.0" />
+      <Label layoutX="290.0" layoutY="13.0" prefHeight="20.0" prefWidth="52.0" text="タイトル" AnchorPane.rightAnchor="50.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="url" layoutX="10.0" layoutY="47.0" prefHeight="25.0" prefWidth="270.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="47.0" />
+      <Label layoutX="298.0" layoutY="50.0" prefHeight="20.0" prefWidth="52.0" text="作品ID" AnchorPane.rightAnchor="50.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="button" layoutX="14.0" layoutY="161.0" mnemonicParsing="false" text="追加" AnchorPane.bottomAnchor="14.0" />
+   </children>
+</AnchorPane>
