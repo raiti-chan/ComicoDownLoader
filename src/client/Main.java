@@ -1,17 +1,22 @@
-package client.gui;
+package client;
 	
 import raiti.RaitisAPI.util.PrintStream.DualPrintStream;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
 
 
 public class Main extends Application {
 	
+	/**
+	 * 出力ストリーム
+	 */
 	public static DualPrintStream dps;
+	
+
 	
 	/**
 	 * Comicoの漫画のトップページURL 後ろに作品ナンバーを付けて使用
@@ -31,13 +36,13 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("MainGUI.fxml"));
+			FXMLLoader fxml = new FXMLLoader(getClass().getResource("gui/MainGUI.fxml"));
+			Parent root = (Parent)fxml.load();
 			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource("gui/application.css").toExternalForm());
 			primaryStage.setTitle("ComicoDownloader");
 			primaryStage.setScene(scene);
 			primaryStage.show();
-			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

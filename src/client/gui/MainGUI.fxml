@@ -24,17 +24,17 @@
       </MenuBar>
    </top>
    <center>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane fx:id="tabpane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
          <tabs>
             <Tab text="基本">
                <content>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
                         <ComboBox fx:id="combo" prefHeight="25.0" prefWidth="300.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
-                        <Button layoutX="328.0" layoutY="10.0" mnemonicParsing="false" text="更新" />
+                        <Button fx:id="updatebt" layoutX="328.0" layoutY="10.0" mnemonicParsing="false" text="更新" />
                         <Button fx:id="downloadbt" layoutX="10.0" layoutY="363.0" mnemonicParsing="false" text="Download" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="10.0" />
                         <Button fx:id="htmlBuildbt" layoutX="108.0" layoutY="363.0" mnemonicParsing="false" text="HTMLBuild" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="100.0" />
-                        <ListView layoutX="14.0" layoutY="44.0" prefHeight="302.0" prefWidth="560.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
+                        <ListView fx:id="list" layoutX="14.0" layoutY="44.0" prefHeight="302.0" prefWidth="560.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
                         <CheckBox fx:id="allCheck" layoutX="514.0" layoutY="27.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="15.0" selected="true" />
                         <CheckBox fx:id="alldeCheck" layoutX="545.0" layoutY="27.0" mnemonicParsing="false" />
                      </children>
