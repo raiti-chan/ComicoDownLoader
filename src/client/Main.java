@@ -33,6 +33,11 @@ public class Main extends Application {
 	 */
 	public static final String STORYINDEXBASE = "&articleNo=";
 	
+	/**
+	 * ページインデックスタグ
+	 */
+	public static final String PAGEINDEXTAG ="&page=";
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {

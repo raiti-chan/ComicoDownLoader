@@ -1,11 +1,13 @@
 package client.gui;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import raiti.RaitisAPI.util.RSystem;
 import raiti.RaitisAPI.util.SystemOutUtility;
 import raiti.RaitisAPI.util.PrintStream.DualFieldPrintStream;
 
@@ -19,7 +21,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
@@ -29,8 +30,10 @@ public class MainController implements Initializable{
 	/**
 	 * メイン
 	 */
-	private Client client;
+	private static Client client;
 	
+
+
 	/**
 	 * 標準の出力先
 	 */
@@ -40,6 +43,16 @@ public class MainController implements Initializable{
 	 * Logエリアへの出力先
 	 */
 	public static PrintStream ps;
+	
+	/**
+	 * LogファイルへのPrintStream
+	 */
+	public static PrintStream logps;
+	
+	/**
+	 * ファイルとLogエリアへの出力ストリーム
+	 */
+	public static DualFieldPrintStream dps;
 	
 	/**
 	 * Log用出力パネル
@@ -108,6 +121,7 @@ public class MainController implements Initializable{
 	@FXML
 	private TabPane tabpane;
 	
+	
 	//------------------------------------------------------code
 	/**<h1>initialize</h1>
 	 * オーバーライド<br>
@@ -125,8 +139,17 @@ public class MainController implements Initializable{
 				this.reset();
 			}
 		},true);
-
-		dfps = SystemOutUtility.OutSeter(ps);
+		
+		try {
+			String logfile = Client.LOGDOR+RSystem.getDateTime("yyyy-MM-dd HH-mm")+".log";
+			logps = new PrintStream(logfile);
+			System.out.println("MakeLogFile -> "+logfile);
+			dps = new DualFieldPrintStream(ps, logps);
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		
+		dfps = SystemOutUtility.OutSeter(dps != null ? dps : ps);
 		System.out.println("Initializeing...");
 		
 		client.initialize();
@@ -136,11 +159,27 @@ public class MainController implements Initializable{
 		//------------------------------------------------------コンボボックス
 		comboini();
 		combo.setOnAction(e -> comboAction(e));
-		
 		//------------------------------------------------------List
 		storylist = FXCollections.observableArrayList();
-		storylist.add("aaa");
 		list.setItems(storylist);
+		list.setCellFactory(new CheckCellFactory());
+		
+		//------------------------------------------------------全チェック/非チェックボタン
+		allCheck.setOnAction(e -> {
+			((CheckBox)e.getSource()).setSelected(true);
+			client.allCheck(true);
+		});
+		alldeCheck.setOnAction(e -> {
+			((CheckBox)e.getSource()).setSelected(false);
+			client.allCheck(false);
+		});
+		
+		//------------------------------------------------------アップデートボタン
+		updatebt.setOnAction(e -> {
+			System.out.println("Update ->" + combo.getValue());
+			if(combo.getValue() == null)return;
+			client.HTMLDownload(combo.getValue(),this.storylist);
+		});
 	}
 	
 	
@@ -158,7 +197,7 @@ public class MainController implements Initializable{
 			System.out.println("addIng");//log
 			if(client.showAddNameDialog(select)) name.add(new Item("追加", true));
 		}
-		client.loadindexList(select);
+		client.loadindexList(select,storylist);
 	}
 	
 	
@@ -176,19 +215,13 @@ public class MainController implements Initializable{
 		combo.setItems(name);
 	}
 	
+	/** <h1>getClient</h1>
+	 * {@link MainController#client}の取得<br>
+	 * @return client
+	 */
+	public static Client getClient() {
+		return client;
+	}
+	
 }
 
-class TestCell extends ListCell<String>{
-	/**<h1>updateItem</h1>
-	 * オーバーライド
-	 * @see javafx.scene.control.Cell#updateItem(java.lang.Object, boolean)
-	 */
-	@Override
-	protected void updateItem(String item, boolean empty) {
-		super.updateItem(item, empty);
-		if(!empty) {
-			setText(item);
-			setGraphic(new CheckBox());
-		}
-	}
-}
