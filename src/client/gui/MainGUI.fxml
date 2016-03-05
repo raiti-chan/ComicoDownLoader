@@ -40,7 +40,7 @@
                      </children>
                   </AnchorPane>
                </content></Tab>
-            <Tab text="Log">
+            <Tab text="Log" fx:id="LogP">
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <center>

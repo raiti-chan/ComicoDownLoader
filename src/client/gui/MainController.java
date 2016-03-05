@@ -22,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 
@@ -38,6 +39,11 @@ public class MainController implements Initializable{
 	 * 標準の出力先
 	 */
 	public static DualFieldPrintStream dfps;
+	
+	/**
+	 * 標準エラー出力先
+	 */
+	public static DualFieldPrintStream dfpse;
 	
 	/**
 	 * Logエリアへの出力先
@@ -121,6 +127,11 @@ public class MainController implements Initializable{
 	@FXML
 	private TabPane tabpane;
 	
+	/**
+	 * ログ用パネル
+	 */
+	@FXML
+	private Tab LogP;
 	
 	//------------------------------------------------------code
 	/**<h1>initialize</h1>
@@ -150,6 +161,8 @@ public class MainController implements Initializable{
 		}
 		
 		dfps = SystemOutUtility.OutSeter(dps != null ? dps : ps);
+		dfpse = SystemOutUtility.ErrSeter(dps != null ? dps : ps);
+		
 		System.out.println("Initializeing...");
 		
 		client.initialize();
@@ -177,8 +190,22 @@ public class MainController implements Initializable{
 		//------------------------------------------------------アップデートボタン
 		updatebt.setOnAction(e -> {
 			System.out.println("Update ->" + combo.getValue());
+			tabpane.getSelectionModel().select(LogP);
 			if(combo.getValue() == null)return;
 			client.HTMLDownload(combo.getValue(),this.storylist);
+		});
+		
+		//------------------------------------------------------Downloadボタン
+		downloadbt.setOnAction(e -> {
+			System.out.println("Download!!");
+			if(combo.getValue() == null)return;
+			client.MainDownload(combo.getValue());
+		});
+		
+		//------------------------------------------------------HTMLBuildボタン
+		htmlBuildbt.setOnAction(e -> {
+			if(combo.getValue() == null)return;
+			client.ButtonHTMLBuild(combo.getValue());
 		});
 	}
 	

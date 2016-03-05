@@ -1,7 +1,11 @@
 http://www.comico.jp/articleList.nhn?titleNo=9604 
 http://www.comico.jp/detail.nhn?titleNo=9604&articleNo=1
 http://www.comico.jp/detail.nhn?titleNo=9604&articleNo=37
+http://images.comico.jp/up/r01/9604_kv312x232.jpg
+http://images.comico.jp/up/r01/9604_kv195x178.jpg
 
 http://www.comico.jp/articleList.nhn?titleNo=1672
 http://www.comico.jp/detail.nhn?titleNo=1672&articleNo=1
 http://www.comico.jp/detail.nhn?titleNo=1672&articleNo=88
+
+http://images.comico.jp/up/r01/2_kv312x232.jpg

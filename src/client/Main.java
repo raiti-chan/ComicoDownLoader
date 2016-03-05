@@ -16,7 +16,7 @@ public class Main extends Application {
 	 */
 	public static DualPrintStream dps;
 	
-
+	public static final String Ver = "Alpha";
 	
 	/**
 	 * Comicoの漫画のトップページURL 後ろに作品ナンバーを付けて使用
@@ -45,7 +45,7 @@ public class Main extends Application {
 			Parent root = (Parent)fxml.load();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("gui/application.css").toExternalForm());
-			primaryStage.setTitle("ComicoDownloader");
+			primaryStage.setTitle("ComicoDownloader Ver."+Ver);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
