@@ -22,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
@@ -133,6 +134,18 @@ public class MainController implements Initializable{
 	@FXML
 	private Tab LogP;
 	
+	/**
+	 * メインページの更新
+	 */
+	@FXML
+	private MenuItem mainUp;
+	
+	/**
+	 * タイトルページの更新
+	 */
+	@FXML
+	private MenuItem titleUp;
+	
 	//------------------------------------------------------code
 	/**<h1>initialize</h1>
 	 * オーバーライド<br>
@@ -206,6 +219,14 @@ public class MainController implements Initializable{
 		htmlBuildbt.setOnAction(e -> {
 			if(combo.getValue() == null)return;
 			client.ButtonHTMLBuild(combo.getValue());
+		});
+		
+		//------------------------------------------------------メインページの更新
+		
+		//------------------------------------------------------タイトルページの更新
+		titleUp.setOnAction(e -> {
+			if(combo.getValue() == null)return;
+			client.titlePageUpData(combo.getValue());
 		});
 	}
 	

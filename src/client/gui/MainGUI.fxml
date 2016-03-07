@@ -14,12 +14,12 @@
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="false" text="ファイル" />
-          <Menu mnemonicParsing="false" text="設定">
+          <Menu mnemonicParsing="false" text="ファイル">
                <items>
-                  <MenuItem mnemonicParsing="false" text="URL" />
-               </items>
-          </Menu>
+                  <MenuItem fx:id="titleUp" mnemonicParsing="false" text="タイトルページを更新" />
+                  <MenuItem fx:id="mainUp" mnemonicParsing="false" text="メインページを更新" />
+               </items></Menu>
+          <Menu mnemonicParsing="false" text="設定" />
         </menus>
       </MenuBar>
    </top>
@@ -40,7 +40,7 @@
                      </children>
                   </AnchorPane>
                </content></Tab>
-            <Tab text="Log" fx:id="LogP">
+            <Tab fx:id="LogP" text="Log">
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <center>

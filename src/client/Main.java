@@ -38,6 +38,16 @@ public class Main extends Application {
 	 */
 	public static final String PAGEINDEXTAG ="&page=";
 	
+	/**
+	 * ヘッダー画像のURL
+	 */
+	public static final String HEADERURL ="http://images.comico.jp/up/r01/";
+	
+	/**
+	 * ヘッダー画像のURL2
+	 */
+	public static final String HEADERURL2 = "_kv1600x430.jpg";
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {

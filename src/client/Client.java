@@ -14,7 +14,9 @@ import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -688,7 +690,7 @@ public class Client {
 			}
 
 		}
-		write.write("<a href=\"../"+title+".html\" title=\"戻る\">戻る</a>\r\n");
+		write.write("<a href=\"../"+name+".html\" title=\"戻る\">戻る</a>\r\n");
 		
 		String nextdir = name+"\\"+(namber+1)+"\\";
 		File nextdirfile = new File(nextdir);
@@ -729,7 +731,7 @@ public class Client {
 			}
 
 		}
-		write.write("<a href=\"../"+title+".html\" title=\"戻る\">戻る</a>\r\n");
+		write.write("<a href=\"../"+name+".html\" title=\"戻る\">戻る</a>\r\n");
 		
 		nextdir = name+"\\"+(namber+1)+"\\";
 		nextdirfile = new File(nextdir);
@@ -789,6 +791,137 @@ public class Client {
 			return "_"+index;
 		}
 	}
+	
+	/** タイトルページの更新
+	 * <h1>titlePageUpData</h1>
+	 * <br>
+	 * @param item
+	 */
+	public void titlePageUpData(Item item) {
+		System.out.println("TitlepageUp ->"+item.getName());
+		File cfile = new File(item.getName());
+		if(cfile.isFile()) {
+			System.out.println("isFile...Delete");
+			cfile.delete();
+		}
+		if(!cfile.exists()) {
+			System.out.println("FALSE!! It hasn't comic directory");
+			return;
+		}
+		//------------------------------------------------------ヘッダー画像がない場合ダウンロード
+		cfile = new File(item.getName()+"\\"+item.getName()+".jpg");
+		if(cfile.isDirectory()) {
+			cfile.delete();
+		}
+		if(!cfile.exists()) {
+			System.out.println("HeaderDownload");
+			try {
+				DownLoader dl = new DownLoader(Main.HEADERURL+item.getId()+Main.HEADERURL2, true);
+				dl.Connecting();
+				dl.download(cfile);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+		
+		//------------------------------------------------------書き込み
+		try(OutputStreamWriter write = new OutputStreamWriter(new FileOutputStream(item.getName()+"\\"+item.getName()+".html"), "UTF-8") {
+			@Override
+			public void write(String str) throws IOException {
+				super.write(str);
+				System.out.print(str);
+			};
+		}){
+			write.write("<html>\r\n\r\n");
+			write.write("<head>\r\n"
+					+ "<link rel=\"stylesheet\" href=\"../MainCSS.css\" type=\"text/css\"> \r\n"
+					+ "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> \r\n"
+					+ "</head>\r\n\r\n");
+			
+			write.write("<body>\r\n");
+			write.write("<div class=\"heder\"  style=\"background-image:url('"+item.getName()+".jpg')\">\r\n\r\n"
+					+ "<div class=\"title\">\r\n"
+					+ item.getName()+"\r\n"
+					+ "</div>\r\n"
+					+ "</div>\r\n"
+					+ "<br>\r\n\r\n");
+			write.write("<div class=\"listbox\">\r\n");
+			
+			//------------------------------------------------------ディレクトリの解析
+			File dir = new File(item.getName());
+			String[] paths = dir.list();
+			File[] files = new File[paths.length];
+			for(int i = 0;i < paths.length;i++) {
+				files[i] = new File(item.getName()+"\\"+paths[i]);
+			}
+			Arrays.sort(files,0,files.length,new Comparator<File>() {
+				
+				@Override
+				public int compare(File o1, File o2) {
+					if(o1.isFile()) {
+						return 0;
+					}
+					if(o2.isFile()) {
+						return 0;
+					}
+					int i1 = Integer.valueOf(o1.getName());
+					int i2 = Integer.valueOf(o2.getName());
+					if(i1 < i2) {
+						return -1;
+					}
+					else if(i1 > i2){
+						return 1;
+					}
+					return 0;
+				}
+			});
+			for(File file:files) {
+				String filename = getHTMLFILE(file);
+				String title = file.getName()+"/"+filename;
+				
+				if(filename != null) {
+					write.write("<a href=\""+title+"\">\r\n"
+							+ "   <div class=\"list\">\r\n"
+							+ "<div class=\"titleimg\" style=\"background-image:url("+file.getName()+"/"+item.getName()+file.getName()+".jpg"+");\">\r\n"
+							+ "</div>\r\n"
+							+ "<h1 class=\"title_text\">\r\n"
+							+ filename.substring(0, filename.length()-5)+"\r\n"
+							+ "</h1>\r\n"
+							+ "</div>\r\n\r\n");
+				}
+			}
+			
+			write.write("<div>\r\n");
+			write.write("</body>\r\n");
+			write.write("</html>");
+			
+			write.flush();
+			write.close();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/** htmlファイルの取得
+	 * <h1>getHTMLFILE</h1>
+	 * <br>
+	 * @param file
+	 * @return
+	 */
+	private static String getHTMLFILE(File file) {
+		if(!file.exists() || file.isFile()) {
+			return null;
+		}
+		FileChecker fc = new FileChecker(file);
+		String filename = fc.ReverseCheck("l");
+		
+		return filename;
+	}
+	
+	
 	
 	/**
 	 * IDリストのファイルの場所
