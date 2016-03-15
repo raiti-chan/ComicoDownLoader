@@ -16,7 +16,7 @@ public class Main extends Application {
 	 */
 	public static DualPrintStream dps;
 	
-	public static final String Ver = "Alpha";
+	public static final String Ver = "1.0.0";
 	
 	/**
 	 * Comicoの漫画のトップページURL 後ろに作品ナンバーを付けて使用
