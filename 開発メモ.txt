@@ -7,3 +7,34 @@
 ファイル読み込みの祭、BOMがある場合の対処
 
 URLが画像差し替え時に暗号部が変わった場合の対処
+
+
+/**
+ * Comicoの漫画のトップページURL 後ろに作品ナンバーを付けて使用
+ */
+public static final String MAINPAGEURL = "http://www.comico.jp/articleList.nhn?titleNo=";
+
+/**
+ * 漫画ページのURL 後ろに作品ナンバーとストーシーインデックスを付けます。
+ */
+public static final String COMICPAGEURL = "http://www.comico.jp/detail.nhn?titleNo=";
+
+/**
+ * ストーリーインデックスのベースです。後ろにインデックスを付与してください
+ */
+public static final String STORYINDEXBASE = "&articleNo=";
+
+/**
+ * ページインデックスタグ
+ */
+public static final String PAGEINDEXTAG ="&page=";
+
+/**
+ * ヘッダー画像のURL
+ */
+public static final String HEADERURL ="http://images.comico.jp/up/r01/";
+
+/**
+ * ヘッダー画像のURL2
+ */
+public static final String HEADERURL2 = "_kv1600x430.jpg";
