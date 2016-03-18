@@ -14,6 +14,9 @@ import raiti.RaitisAPI.io.File;
 
 import client.System.Client;
 import client.System.SystemRegistry;
+import client.gui.Item;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 
 /** <h1>ComicTitle</h1>
@@ -58,5 +61,18 @@ public class ComicTitle extends Properties{
 		return old;
 	}
 	
+	/**
+	 * <h1>getList</h1>
+	 * アイテムリストを返します<br>
+	 * @return
+	 */
+	public synchronized ObservableList<Item> getList(){
+		ObservableList<Item> item = FXCollections.observableArrayList();
+		this.forEach((name,id) -> {
+			item.add(new Item((String)name, (String)id));
+		});
+		item.add(new Item());
+		return item;
+	}
 	
 }

@@ -10,7 +10,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 /** <h1>AddNameDialog</h1>
  * <br>
@@ -38,10 +37,6 @@ public class AddNameDialog implements Initializable{
 	@FXML
 	private Button button;
 	
-	/**
-	 * 自身のステージ
-	 */
-	private Stage thisstage;
 
 	/**<h1>initialize</h1>
 	 * オーバーライド
@@ -51,7 +46,7 @@ public class AddNameDialog implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		
 		button.setOnAction(e -> {
-			this.thisstage.close();
+			this.button.getScene().getWindow().hide();
 		});
 		
 	}
@@ -74,13 +69,5 @@ public class AddNameDialog implements Initializable{
 		return name.getText();
 	}
 	
-	/**
-	 * <h1>setStage</h1>
-	 * 自身のステージをセットします<br>
-	 * @param s
-	 */
-	public void setStage(Stage s) {
-		this.thisstage = s;
-	}
 	
 }

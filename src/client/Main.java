@@ -39,7 +39,7 @@ public class Main extends Application {
 			primaryStage.setTitle("ComicoDownloader Ver."+Ver);
 			primaryStage.setScene(scene);
 			primaryStage.show();
-			MainController.client = new Client();
+			MainController.client = new Client((MainController)fxml.getController());
 		} catch(Exception e) {
 			Client.Exception(e);
 		}

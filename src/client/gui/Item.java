@@ -48,7 +48,17 @@ public class Item {
 		this.id = "unknown";
 		this.isAddingItem = true;
 	}
-
+	
+	/**
+	 * <h1>toString</h1>
+	 * オーバーライド
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return title;
+	}
+	
 	/**
 	 * 作品名を取得します。
 	 * @return 作品名

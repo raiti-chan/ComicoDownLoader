@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 
 import client.Main;
 import client.System.Client;
+import client.System.SystemRegistry;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -148,6 +149,7 @@ public class MainController implements Initializable{
 		};
 		Client.setPrintStream(out);
 		
+		//------------------------------------------------------バツボタン
 		Main.mainStage.setOnCloseRequest(e -> {
 			if(client.finish()) {
 				
@@ -155,9 +157,54 @@ public class MainController implements Initializable{
 				e.consume();
 			}
 		});
+		
+		//------------------------------------------------------LogClearボタン
+		clsbt.setOnAction(e -> logOut.setText(""));
+		//------------------------------------------------------全チェックボタン
+		allCheck.setOnAction(e -> allCheck(true));
+		//------------------------------------------------------全非チェックボタン
+		alldeCheck.setOnAction(e -> allCheck(false));
+		//------------------------------------------------------漫画セレクトボックス
+		combo.setOnAction(e -> ComicSelect());
+		
+		
 	}
 	
+	/**
+	 * <h1>ComicSelect</h1>
+	 * <br>
+	 */
+	private void ComicSelect() {
+		Item select = combo.getValue();
+		System.out.println("Select:"+select.toString()+"="+select.getId());
+		if(select.isAddingItem()) {
+			System.out.println("addIng");//log
+			if(client.showAddNameDialog(select)) combo.getItems().add(new Item());
+		}
+	}
 	
+	/**
+	 * <h1>allCheck</h1>
+	 * 全チェック/非チェック<br>
+	 * @param check
+	 */
+	private void allCheck(boolean check) {
+		if(check == true) {
+			System.out.println("AllCheck!!");
+			allCheck.setSelected(true);
+		}else {
+			System.out.println("AllCheck Remove!!");
+			alldeCheck.setSelected(false);
+		}
+	}
+	
+	/**
+	 * <h1>upDate</h1>
+	 * GUIの読み込み部分のアップデートを行います<br>
+	 */
+	public void upDate() {
+		this.combo.setItems(SystemRegistry.ComicTitle().getList());
+	}
 	
 	
 }
