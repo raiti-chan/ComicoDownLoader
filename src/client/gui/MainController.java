@@ -9,6 +9,9 @@ import java.util.ResourceBundle;
 import client.Main;
 import client.System.Client;
 import client.System.SystemRegistry;
+import item.EventItem;
+import item.StoryItem;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -96,13 +99,13 @@ public class MainController implements Initializable{
 	 * 章一覧リスト
 	 */
 	@FXML
-	private ListView<String> list;
+	private ListView<StoryItem> list;
 	
 	/**
 	 * イベントリスト
 	 */
 	@FXML
-	private ListView<?> eventlist;
+	private ListView<EventItem> eventlist;
 	
 	/**
 	 * ログの出力先
@@ -181,6 +184,7 @@ public class MainController implements Initializable{
 			System.out.println("addIng");//log
 			if(client.showAddNameDialog(select)) combo.getItems().add(new Item());
 		}
+		client.LoadIndexList(select.getTitle());
 	}
 	
 	/**
@@ -206,6 +210,15 @@ public class MainController implements Initializable{
 		this.combo.setItems(SystemRegistry.ComicTitle().getList());
 	}
 	
+	/**
+	 * <h1>listSetup</h1>
+	 * リストをセットアップします<br>
+	 * @param list
+	 */
+	public void listSetup(ObservableList<StoryItem> list) {
+		this.list.setItems(list);
+		this.list.setCellFactory(new CheckCellFactory());
+	}
 	
 }
 

@@ -85,6 +85,7 @@ public class Client {
 		LogCheck();//ログファイルの容量チェック。
 		GUIInitialize();//GUIの初期化(データ部分)
 		
+		MC.listSetup(SystemRegistry.StoryList());
 		ADDITEM_DIALOG = getClass().getClassLoader().getResource("client/gui/Dialog/AddNameDialog.fxml");
 		eventRun = new EventRunning();//イベントスレッド
 		eventRunThread = new Thread(eventRun,"EventRunning");
@@ -190,7 +191,16 @@ public class Client {
 		return false;
 	}
 	
-	
+	/**
+	 * <h1>LoadIndexList</h1>
+	 * ストーリーリストを読み込みます。<br>
+	 * @param name
+	 */
+	public void LoadIndexList(String name) {
+		SystemRegistry.Story().load(name);
+		SystemRegistry.StoryUpdate();
+		
+	}
 
 	/**
 	 * <h1>FileCheck</h1>

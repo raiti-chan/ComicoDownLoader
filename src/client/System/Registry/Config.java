@@ -48,7 +48,7 @@ public class Config extends Properties{
 		if(isNew == true) {
 			this.setProperty(CONFIGPATH, "Config/");
 			this.setProperty(MAINDIRPATH, "Comico/");
-			this.setProperty(TEMPDIRPATH, ".TEMP");
+			this.setProperty(TEMPDIRPATH, ".TEMP/");
 			this.setProperty(MAXLOGS, "10");
 			save();
 		}

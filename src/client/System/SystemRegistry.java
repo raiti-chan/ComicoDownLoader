@@ -9,6 +9,9 @@ import client.System.Registry.ComicTitle;
 import client.System.Registry.Config;
 import client.System.Registry.Event;
 import client.System.Registry.Story;
+import item.StoryItem;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /** <h1>SystemRegistry</h1>
  * <br>
@@ -43,6 +46,11 @@ public class SystemRegistry {
 	 */
 	private static Event event;
 	
+	/**
+	 * ストーリーリスト
+	 */
+	private static ObservableList<StoryItem> storyList;
+	
 	
 	public static void RegistryInitialize() {
 		try {
@@ -50,6 +58,7 @@ public class SystemRegistry {
 			comictitle = new ComicTitle();
 			story = new Story();
 			event = new Event();
+			storyList = FXCollections.observableArrayList();
 		} catch (IOException e) {
 			Client.Exception(e);
 		}
@@ -78,7 +87,7 @@ public class SystemRegistry {
 	 * ストーリーリストのプロパティー<br>
 	 * @return ストーリープロパティー
 	 */
-	public synchronized static Story Stiry() {
+	public synchronized static Story Story() {
 		return story;
 	}
 	
@@ -91,6 +100,22 @@ public class SystemRegistry {
 		return event;
 	}
 	
+	/**
+	 * <h1>StoryUpdate</h1>
+	 * ストーリーリストを更新します<br>
+	 */
+	public synchronized static void StoryUpdate() {
+		Story().getList(StoryList());
+	}
+	
+	/**
+	 * <h1>StoryList</h1>
+	 * ストーリーリスト<br>
+	 * @return
+	 */
+	public synchronized static ObservableList<StoryItem> StoryList(){
+		return storyList;
+	}
 	
 	/**
 	 * Comicoの漫画のトップページURL 後ろに作品ナンバーを付けて使用
