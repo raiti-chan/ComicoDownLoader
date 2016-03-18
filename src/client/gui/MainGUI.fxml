@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane prefHeight="456.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.MainController">
+<BorderPane fx:id="main" prefHeight="456.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.MainController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -24,7 +24,7 @@
       </MenuBar>
    </top>
    <center>
-      <TabPane fx:id="tabpane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
          <tabs>
             <Tab text="基本">
                <content>
@@ -35,19 +35,32 @@
                         <Button fx:id="downloadbt" layoutX="10.0" layoutY="363.0" mnemonicParsing="false" text="Download" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="10.0" />
                         <Button fx:id="htmlBuildbt" layoutX="108.0" layoutY="363.0" mnemonicParsing="false" text="HTMLBuild" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="100.0" />
                         <ListView fx:id="list" layoutX="14.0" layoutY="44.0" prefHeight="302.0" prefWidth="560.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
-                        <CheckBox fx:id="allCheck" layoutX="514.0" layoutY="27.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="15.0" selected="true" />
-                        <CheckBox fx:id="alldeCheck" layoutX="545.0" layoutY="27.0" mnemonicParsing="false" />
+                        <CheckBox fx:id="allCheck" layoutX="514.0" layoutY="27.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="15.0" selected="true" AnchorPane.rightAnchor="45.0" />
+                        <CheckBox fx:id="alldeCheck" layoutX="545.0" layoutY="27.0" mnemonicParsing="false" AnchorPane.rightAnchor="15.0" />
+                        <Button fx:id="ndlCheck" layoutX="441.0" layoutY="363.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="未ダウンロード選択" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                        <Button fx:id="sortbt" layoutX="453.0" layoutY="23.0" mnemonicParsing="false" text="sort:↑" AnchorPane.rightAnchor="76.0" AnchorPane.topAnchor="23.0" />
                      </children>
                   </AnchorPane>
-               </content></Tab>
-            <Tab fx:id="LogP" text="Log">
+               </content>
+            </Tab>
+            <Tab text="イベントリスト">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ProgressBar fx:id="running" layoutX="14.0" layoutY="370.0" prefHeight="18.0" prefWidth="561.0" progress="0.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                        <ListView fx:id="eventlist" layoutX="14.0" layoutY="14.0" prefHeight="342.0" prefWidth="552.0" AnchorPane.bottomAnchor="46.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Log">
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <center>
                         <TextArea fx:id="logOut" editable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
                      </center>
                      <bottom>
-                        <Button fx:id="clsbutton" mnemonicParsing="false" prefHeight="25.0" prefWidth="130.0" text="LogClear" BorderPane.alignment="TOP_LEFT">
+                        <Button fx:id="clsbt" mnemonicParsing="false" prefHeight="25.0" prefWidth="130.0" text="LogClear" BorderPane.alignment="TOP_LEFT">
                            <BorderPane.margin>
                               <Insets />
                            </BorderPane.margin>
