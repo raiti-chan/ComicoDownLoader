@@ -201,7 +201,7 @@ public class Client {
 		SystemRegistry.StoryUpdate();
 		
 	}
-
+	
 	/**
 	 * <h1>FileCheck</h1>
 	 * ファイルが存在するかをチェックします<br>
@@ -280,8 +280,8 @@ public class Client {
 		pane.setExpandableContent(new TextArea(text));
 		alert.showAndWait();
 	}
-
-
-
+	
+	
+	
 	
 }

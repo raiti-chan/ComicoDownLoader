@@ -99,6 +99,15 @@ public class StoryItem {
 	}
 	
 	/**
+	 * <h1>setSelect</h1>
+	 * 要素のセレクトプロパティーを設定します<br>
+	 * @param select
+	 */
+	public void setSelect(boolean select) {
+		getCb().setSelected(select);
+	}
+	
+	/**
 	 * ここから先はURLというマーク
 	 */
 	public static final String URLMARK = "://";

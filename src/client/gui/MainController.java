@@ -200,6 +200,10 @@ public class MainController implements Initializable{
 			System.out.println("AllCheck Remove!!");
 			alldeCheck.setSelected(false);
 		}
+		SystemRegistry.StoryList().forEach(o -> {
+			StoryItem item = o;
+			item.setSelect(check);
+		});
 	}
 	
 	/**
