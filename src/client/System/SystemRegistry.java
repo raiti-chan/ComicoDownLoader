@@ -4,6 +4,8 @@
 package client.System;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 
 import client.System.Registry.ComicTitle;
 import client.System.Registry.Config;
@@ -106,6 +108,21 @@ public class SystemRegistry {
 	 */
 	public synchronized static void StoryUpdate() {
 		Story().getList(StoryList());
+	}
+	
+	/**
+	 * <h1>StorySort</h1>
+	 * ストーリーリストをソートします<br>
+	 * @param revase
+	 */
+	public synchronized static void StorySort(boolean revase) {
+		StoryList().sort(new Comparator<StoryItem>() {
+			@Override
+			public int compare(StoryItem o1, StoryItem o2) {
+				return o1.getIndex()-o2.getIndex();
+			}
+		});
+		if(revase == false)Collections.reverse(storyList);
 	}
 	
 	/**

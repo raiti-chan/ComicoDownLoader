@@ -3,12 +3,17 @@ package client.gui;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import raiti.RaitisAPI.io.File;
 
 import client.Main;
 import client.System.Client;
 import client.System.SystemRegistry;
+import client.System.Registry.Config;
 import item.EventItem;
 import item.StoryItem;
 import javafx.collections.ObservableList;
@@ -132,6 +137,10 @@ public class MainController implements Initializable{
 	 */
 	public static Client client;
 	
+	/**
+	 * リストが最新順だとfalse
+	 */
+	private boolean listreverse = false;
 
 	
 	//------------------------------------------------------code
@@ -167,12 +176,23 @@ public class MainController implements Initializable{
 		allCheck.setOnAction(e -> allCheck(true));
 		//------------------------------------------------------全非チェックボタン
 		alldeCheck.setOnAction(e -> allCheck(false));
+		//------------------------------------------------------ソートボタン
+		sortbt.setOnAction(e -> sort());
+		//------------------------------------------------------DLしていない章を自動選択
+		ndlCheck.setOnAction(e -> autoCheck());
 		//------------------------------------------------------漫画セレクトボックス
 		combo.setOnAction(e -> ComicSelect());
+		
+		//------------------------------------------------------更新ボタン
+		updatebt.setOnAction(e -> {
+			SystemRegistry.Event().addEvent(new EventItem());
+			client.eventRunningRestart();
+		});
 		
 		
 	}
 	
+
 	/**
 	 * <h1>ComicSelect</h1>
 	 * <br>
@@ -185,6 +205,7 @@ public class MainController implements Initializable{
 			if(client.showAddNameDialog(select)) combo.getItems().add(new Item());
 		}
 		client.LoadIndexList(select.getTitle());
+		SystemRegistry.StorySort(listreverse);
 	}
 	
 	/**
@@ -206,6 +227,55 @@ public class MainController implements Initializable{
 		});
 	}
 	
+	/**<h1>sort</h1>
+	 * ソートボタン<br>
+	 * @return
+	 */
+	private void sort() {
+		listreverse = !listreverse;
+		if(listreverse == true) {
+			sortbt.setText("sort:↓");
+		}else {
+			sortbt.setText("sort:↑");
+		}
+		SystemRegistry.StorySort(listreverse);
+	}
+	
+	/**
+	 * <h1>autoCheck</h1>
+	 * ダウンロードしていない章を自動選択<br>
+	 */
+	private void autoCheck() {
+		if(combo.getValue() == null)return;
+		File Cdir = new File(SystemRegistry.Config().getProperty(Config.MAINDIRPATH)+combo.getValue().getTitle());
+		Client.FileCheck(Cdir, false, true);
+		String[] paths = Cdir.list();
+		System.out.println(paths.length + "Files");
+		if(paths.length == 0) {
+			allCheck(true);
+			return;
+		}
+		ArrayList<String> indexs = new ArrayList<>();
+		for(String path:paths) {
+			Matcher m = pattern.matcher(path);
+			if(m.find()) {
+				if(Client.haveHTMLdir(new File(Cdir.getPath()+"\\"+path))) indexs.add(path);
+			}
+		}
+		SystemRegistry.StoryList().forEach(o -> {
+			String index = o.getIndex()+"";
+			if(indexs.contains(index)) {
+				System.out.println(o.getTitle()+":true");
+				o.getCb().setSelected(false);
+			}else {
+				System.out.println(o.getTitle()+":false");
+				o.getCb().setSelected(true);
+			}
+		});
+		
+		
+	}
+	
 	/**
 	 * <h1>upDate</h1>
 	 * GUIの読み込み部分のアップデートを行います<br>
@@ -222,7 +292,10 @@ public class MainController implements Initializable{
 	public void listSetup(ObservableList<StoryItem> list) {
 		this.list.setItems(list);
 		this.list.setCellFactory(new CheckCellFactory());
+		//this.eventlist.setItems(SystemRegistry.Event().getList());
 	}
 	
+	
+	public static Pattern pattern = Pattern.compile("\\A[0-9]+\\z");
 }
 

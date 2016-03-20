@@ -13,6 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import raiti.RaitisAPI.io.File;
+import raiti.RaitisAPI.io.FileChecker;
 import raiti.RaitisAPI.util.RSystem;
 import raiti.RaitisAPI.util.SystemOutUtility;
 import raiti.RaitisAPI.util.PrintStream.DualFieldPrintStream;
@@ -45,7 +46,7 @@ public class Client {
 	/**
 	 * イベント処理クラス
 	 */
-	private EventRunning eventRun;
+	public EventRunning eventRun;
 	
 	/**
 	 * イベント処理スレッド
@@ -82,6 +83,9 @@ public class Client {
 		MC = mc;
 		SystemRegistry.RegistryInitialize();//レジストリーの初期化
 		//------------------------------------------------------ファイルチェック
+		FileCheck(new File(SystemRegistry.Config().getProperty(Config.MAINDIRPATH)), false, true);
+		FileCheck(new File(SystemRegistry.Config().getProperty(Config.CONFIGPATH)), false, true);
+		FileCheck(new File(SystemRegistry.Config().getProperty(Config.TEMPDIRPATH)), false, true);
 		LogCheck();//ログファイルの容量チェック。
 		GUIInitialize();//GUIの初期化(データ部分)
 		
@@ -89,6 +93,7 @@ public class Client {
 		ADDITEM_DIALOG = getClass().getClassLoader().getResource("client/gui/Dialog/AddNameDialog.fxml");
 		eventRun = new EventRunning();//イベントスレッド
 		eventRunThread = new Thread(eventRun,"EventRunning");
+		eventRunThread.setPriority(8);
 		eventRunThread.start();//イベントスレッド起動
 	}
 	
@@ -115,8 +120,10 @@ public class Client {
 			printStream.setPrint2(print2);
 			if(Main.debugMode == true) {
 				SystemOutUtility.OutSeter(printStream);
+				SystemOutUtility.ErrSeter(printStream);
 			}else {
 				System.setOut(printStream);
+				System.setErr(printStream);
 			}
 		}catch(IOException e) {
 			Exception(e);
@@ -203,6 +210,15 @@ public class Client {
 	}
 	
 	/**
+	 * <h1>eventRunningRestart</h1>
+	 * イベント処理スレッドを再開させようとします<br>
+	 */
+	public synchronized void eventRunningRestart() {
+		System.out.println(eventRun.isSleep());
+		if(eventRun.isSleep())eventRunThread.interrupt();
+	}
+	
+	/**
 	 * <h1>FileCheck</h1>
 	 * ファイルが存在するかをチェックします<br>
 	 * @param file チェックするファイルです。
@@ -281,7 +297,24 @@ public class Client {
 		alert.showAndWait();
 	}
 	
-	
+	/**
+	 * <h1>haveHTMLdir</h1>
+	 * このディレクトリーがHTMLファイルを持っているかチェックします<br>
+	 * @param dir
+	 * @return 持っている場合true、ファイルだった場合、及び持っていないときfalse
+	 */
+	public static boolean haveHTMLdir(File dir) {
+		if(dir.isFile()) {
+			System.out.println("Is File!!");
+			return false;
+		}
+		FileChecker fc = new FileChecker(dir);
+		String filename = fc.ReverseCheck(".html");
+		if(filename == null) {
+			return false;
+		}
+		return true;
+	}
 	
 	
 }

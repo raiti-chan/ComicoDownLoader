@@ -14,7 +14,16 @@ import client.System.SystemRegistry;
  */
 public class EventRunning implements Runnable{
 	
-	private boolean end = true;
+	/**
+	 * 終了フラグ
+	 */
+	private volatile boolean end = true;
+	
+	/**
+	 * スレッドが停止している場合true
+	 */
+	private volatile boolean isSleep = false;
+	
 	
 	/**
 	 * <h1>run</h1>
@@ -34,22 +43,45 @@ public class EventRunning implements Runnable{
 	 * @return 終了できた場合true
 	 */
 	public synchronized boolean end() {
+		System.out.println("try...End");
 		if(SystemRegistry.Event().getList().size() == 0) {
 			end = false;
+			if(this.isSleep == true) {
+				notify();
+			}
+			System.out.println("END!!");
 			return true;
 		}else {
+			System.err.println("Failure!! -> RunningEvent is "+SystemRegistry.Event().getList().size()+" Event");
 			return false;
 		}
 
 	}
 	
+	
+	/** <h1>isSleep</h1>
+	 * {@link EventRunning#isSleep}の取得<br>
+	 * @return isSleep
+	 */
+	public synchronized boolean isSleep() {
+		return this.isSleep;
+	}
+
 	/**
 	 * <h1>mainLoop</h1>
 	 * メインループ<br>
 	 */
-	public synchronized void mainLoop() {
+	private synchronized void mainLoop() {
 		if(SystemRegistry.Event().getList().size() != 0){
 			SystemRegistry.Event().run();
+			SystemRegistry.Event().getList().remove(0);
+		}else {
+			try {
+				this.isSleep = true;
+				this.wait();
+			} catch (InterruptedException e) {
+				this.isSleep = false;
+			}
 		}
 		
 	}
