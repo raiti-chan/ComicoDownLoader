@@ -4,9 +4,10 @@
 package client.System.Registry;
 
 
+import java.util.ArrayList;
+
+import client.gui.MainController;
 import item.EventItem;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 /** <h1>Event</h1>
  * 処理リスト<br>
@@ -16,7 +17,7 @@ import javafx.collections.ObservableList;
  */
 public class Event {
 	
-	private ObservableList<EventItem> list;
+	private ArrayList<EventItem> list;
 	
 	//-------------------------------------コンストラクター
 	/**
@@ -24,16 +25,17 @@ public class Event {
 	 *
 	 */
 	public Event() {
-		list = FXCollections.observableArrayList();
+		list = new ArrayList<>();
 	}
 	
 	/**
 	 * <h1>run</h1>
 	 * イベントを起動します<br>
 	 */
-	public synchronized void run() {
+	public void run() {
 		list.get(0).run();
 		list.get(0).setFinish(true);
+		
 	}
 	
 	/**
@@ -41,17 +43,17 @@ public class Event {
 	 * イベントの追加<br>
 	 * @param event
 	 */
-	public synchronized void addEvent(EventItem event) {
+	public void addEvent(EventItem event) {
 		System.out.println("AddEvent..."+event.toString());
 		list.add(event);
-
+		MainController.client.eventRunningRestart();
 	}
 	
 	/** <h1>getList</h1>
 	 * {@link Event#list}の取得<br>
 	 * @return list
 	 */
-	public synchronized ObservableList<EventItem> getList() {
+	public  ArrayList<EventItem> getList() {
 		return list;
 	}
 }

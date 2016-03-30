@@ -2,6 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="E:/Program/Java/ライブラリー/Raiti&apos;sAPI Master.jar"/>
+	<classpathentry kind="lib" path="D:/Raiti/Documents/Java/ライブラリー/Raiti&apos;sAPI Master.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

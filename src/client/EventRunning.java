@@ -5,6 +5,7 @@ package client;
 
 
 import client.System.SystemRegistry;
+import client.gui.MainController;
 
 /** <h1>EventRunning</h1>
  * キューに登録されたイベントの処理<br>
@@ -42,13 +43,11 @@ public class EventRunning implements Runnable{
 	 * スレッドを終了させます<br>
 	 * @return 終了できた場合true
 	 */
-	public synchronized boolean end() {
+	public boolean end() {
 		System.out.println("try...End");
 		if(SystemRegistry.Event().getList().size() == 0) {
 			end = false;
-			if(this.isSleep == true) {
-				notify();
-			}
+			MainController.client.eventRunningRestart();
 			System.out.println("END!!");
 			return true;
 		}else {
@@ -63,7 +62,7 @@ public class EventRunning implements Runnable{
 	 * {@link EventRunning#isSleep}の取得<br>
 	 * @return isSleep
 	 */
-	public synchronized boolean isSleep() {
+	public boolean isSleep() {
 		return this.isSleep;
 	}
 
@@ -75,6 +74,7 @@ public class EventRunning implements Runnable{
 		if(SystemRegistry.Event().getList().size() != 0){
 			SystemRegistry.Event().run();
 			SystemRegistry.Event().getList().remove(0);
+			MainController.client.ListUP();
 		}else {
 			try {
 				this.isSleep = true;

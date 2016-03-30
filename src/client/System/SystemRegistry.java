@@ -48,6 +48,7 @@ public class SystemRegistry {
 	 */
 	private static Event event;
 	
+	
 	/**
 	 * ストーリーリスト
 	 */
@@ -98,7 +99,7 @@ public class SystemRegistry {
 	 * <br>
 	 * @return
 	 */
-	public synchronized static Event Event() {
+	public static Event Event() {
 		return event;
 	}
 	
@@ -106,7 +107,7 @@ public class SystemRegistry {
 	 * <h1>StoryUpdate</h1>
 	 * ストーリーリストを更新します<br>
 	 */
-	public synchronized static void StoryUpdate() {
+	public static void StoryUpdate() {
 		Story().getList(StoryList());
 	}
 	

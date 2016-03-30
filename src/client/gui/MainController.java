@@ -14,8 +14,8 @@ import client.Main;
 import client.System.Client;
 import client.System.SystemRegistry;
 import client.System.Registry.Config;
-import item.EventItem;
 import item.StoryItem;
+import item.StoryListUpdate;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -110,7 +110,7 @@ public class MainController implements Initializable{
 	 * イベントリスト
 	 */
 	@FXML
-	private ListView<EventItem> eventlist;
+	private ListView<String> eventlist;
 	
 	/**
 	 * ログの出力先
@@ -150,7 +150,6 @@ public class MainController implements Initializable{
 	 * @see javafx.fxml.Initializable#initialize(java.net.URL, java.util.ResourceBundle)
 	 */
 	@Override
-
 	public void initialize(URL location, ResourceBundle resources) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream() {
 			@Override
@@ -184,11 +183,7 @@ public class MainController implements Initializable{
 		combo.setOnAction(e -> ComicSelect());
 		
 		//------------------------------------------------------更新ボタン
-		updatebt.setOnAction(e -> {
-			SystemRegistry.Event().addEvent(new EventItem());
-			client.eventRunningRestart();
-		});
-		
+		updatebt.setOnAction(e -> SystemRegistry.Event().addEvent(new StoryListUpdate("Test")));
 		
 	}
 	
@@ -292,10 +287,20 @@ public class MainController implements Initializable{
 	public void listSetup(ObservableList<StoryItem> list) {
 		this.list.setItems(list);
 		this.list.setCellFactory(new CheckCellFactory());
-		//this.eventlist.setItems(SystemRegistry.Event().getList());
 	}
 	
+	/**
+	 * <h1>listupdate</h1>
+	 * イベントリストの更新<br>
+	 * @param list
+	 */
+	public void listupdate(ObservableList<String> list) {
+		this.eventlist.setItems(list);
+	}
 	
+	/**
+	 * パターン
+	 */
 	public static Pattern pattern = Pattern.compile("\\A[0-9]+\\z");
 }
 

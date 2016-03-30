@@ -13,7 +13,7 @@
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="${dir.buildfile}/bin"/>
-            <zipfileset excludes="META-INF/*.SF" src="E:/Program/Java/ライブラリー/Raiti'sAPI Master.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="D:\Raiti\Documents\Java\ライブラリー"/>
         </jar>
     </target>
 </project>

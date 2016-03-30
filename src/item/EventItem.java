@@ -9,7 +9,7 @@ package item;
  * @version 1.0.0
  * 
  */
-public class EventItem {
+public abstract class EventItem {
 	
 	private boolean isFinish = false;
 	
@@ -22,11 +22,16 @@ public class EventItem {
 	 * <h1>run</h1>
 	 * イベント処理<br>
 	 */
-	public void run() {
+	public synchronized void run() {
 		if(isFinish == true) return;
-		System.out.println("EventItem running");
-		
+		code();
 	}
+	
+	/**
+	 * <h1>code</h1>
+	 * 処理コード<br>
+	 */
+	public abstract void code();
 
 	/**
 	 * isFinishを取得します。

@@ -4,7 +4,10 @@
 package client.System;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,6 +27,9 @@ import client.System.Registry.Config;
 import client.gui.Item;
 import client.gui.MainController;
 import client.gui.Dialog.AddNameDialog;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -86,6 +92,26 @@ public class Client {
 		FileCheck(new File(SystemRegistry.Config().getProperty(Config.MAINDIRPATH)), false, true);
 		FileCheck(new File(SystemRegistry.Config().getProperty(Config.CONFIGPATH)), false, true);
 		FileCheck(new File(SystemRegistry.Config().getProperty(Config.TEMPDIRPATH)), false, true);
+		if(!FileCheck(new File(SystemRegistry.Config().getProperty(Config.MAINDIRPATH)+"MainCSS.css"), true, false)) {
+			System.out.println("Copy -> "+getClass().getClassLoader().getResource("Resource/MainCSS.txt").getPath()+" to "+"MainCSS.css");
+			try {
+				InputStream input = getClass().getClassLoader().getResourceAsStream("Resource/MainCSS.txt");
+				FileOutputStream output = new FileOutputStream(SystemRegistry.Config().getProperty(Config.MAINDIRPATH)+"MainCSS.css");
+				byte[] buffer = new byte[2480];
+				int length;
+				do {
+					length = input.read(buffer);
+					output.write(buffer, 0, length);
+				} while (length == -1);
+				output.flush();
+				output.close();
+				input.close();
+			} catch (FileNotFoundException e) {
+				Exception(e);
+			} catch (IOException e) {
+				Exception(e);
+			}
+		};
 		LogCheck();//ログファイルの容量チェック。
 		GUIInitialize();//GUIの初期化(データ部分)
 		
@@ -95,6 +121,7 @@ public class Client {
 		eventRunThread = new Thread(eventRun,"EventRunning");
 		eventRunThread.setPriority(8);
 		eventRunThread.start();//イベントスレッド起動
+		
 	}
 	
 	/**
@@ -118,6 +145,8 @@ public class Client {
 			filePrintstream = new PrintStream(Config.LOGDIRPATH+RSystem.getDateTime("yyyy-MM-dd-HH-mm-ss")+".txt");
 			printStream.setPrint1(filePrintstream);
 			printStream.setPrint2(print2);
+			printStream.setTimeDumpofprint1(false);
+			printStream.setTimeDumpofprint2(false);
 			if(Main.debugMode == true) {
 				SystemOutUtility.OutSeter(printStream);
 				SystemOutUtility.ErrSeter(printStream);
@@ -213,9 +242,21 @@ public class Client {
 	 * <h1>eventRunningRestart</h1>
 	 * イベント処理スレッドを再開させようとします<br>
 	 */
-	public synchronized void eventRunningRestart() {
-		System.out.println(eventRun.isSleep());
+	public void eventRunningRestart() {
 		if(eventRun.isSleep())eventRunThread.interrupt();
+	}
+	
+	/**<h1>ListUP</h1>
+	 * イベントリストを更新します<br>
+	 */
+	public void ListUP() {
+		ObservableList<String> list = FXCollections.observableArrayList();
+		SystemRegistry.Event().getList().forEach(o ->{
+			list.add(o.toString());
+		});
+		Platform.runLater(() ->{
+			MC.listupdate(list);
+		});
 	}
 	
 	/**
@@ -236,7 +277,7 @@ public class Client {
 			if(!file.exists() && make == true) {
 				System.out.println("False!! Make..."+file.getPath());
 				file.MakeFile();
-			}else return true;
+			}else if(file.exists()) return true;
 		}else {
 			if(file.isFile()){
 				System.out.println("is File... Delete"+file.getPath());
@@ -245,9 +286,9 @@ public class Client {
 			if(!file.exists() && make == true) {
 				System.out.println("False!! Make..."+file.getPath());
 				file.mkdirs();
-			}else return true;
+			}else if(file.exists()) return true;
 		}
-		
+		System.out.println("False!!");
 		return false;
 	}
 	
@@ -315,6 +356,8 @@ public class Client {
 		}
 		return true;
 	}
+
+
 	
 	
 }
