@@ -141,7 +141,7 @@ public class SystemRegistry {
 	public static final String MAINPAGEURL = "http://www.comico.jp/articleList.nhn?titleNo=";
 
 	/**
-	 * 漫画ページのURL 後ろに作品ナンバーとストーシーインデックスを付けます。
+	 * 漫画ページのURL 後ろに作品ナンバーとストーリーインデックスを付けます。
 	 */
 	public static final String COMICPAGEURL = "http://www.comico.jp/detail.nhn?titleNo=";
 

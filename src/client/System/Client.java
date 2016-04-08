@@ -325,17 +325,19 @@ public class Client {
 	 */
 	public static void Exception(Exception e) {
 		e.printStackTrace();
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setResizable(true);
-		DialogPane pane = alert.getDialogPane();
-		pane.setHeaderText(e.getClass().toString()+"\r\n"+e.getMessage());
-		pane.setExpanded(true);
-		String text = e.toString()+"\r\n\r\n";
-		for(StackTraceElement ste:e.getStackTrace()) {
-			text += ste.toString()+"\r\n";
-		}
-		pane.setExpandableContent(new TextArea(text));
-		alert.showAndWait();
+		Platform.runLater(() ->{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setResizable(true);
+			DialogPane pane = alert.getDialogPane();
+			pane.setHeaderText(e.getClass().toString()+"\r\n"+e.getMessage());
+			pane.setExpanded(true);
+			String text = e.toString()+"\r\n\r\n";
+			for(StackTraceElement ste:e.getStackTrace()) {
+				text += ste.toString()+"\r\n";
+			}
+			pane.setExpandableContent(new TextArea(text));
+			alert.showAndWait();
+		});
 	}
 	
 	/**

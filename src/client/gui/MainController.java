@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,8 +18,11 @@ import client.System.Registry.Config;
 import item.StoryItem;
 import item.StoryListUpdate;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -154,7 +158,7 @@ public class MainController implements Initializable{
 		ByteArrayOutputStream out = new ByteArrayOutputStream() {
 			@Override
 			public void flush() throws IOException {
-				logOut.appendText(toString());
+				//TODO : logOut.appendText(toString());
 				reset();
 			}
 		};
@@ -183,16 +187,53 @@ public class MainController implements Initializable{
 		combo.setOnAction(e -> ComicSelect());
 		
 		//------------------------------------------------------更新ボタン
-		updatebt.setOnAction(e -> SystemRegistry.Event().addEvent(new StoryListUpdate("Test")));
+		updatebt.setOnAction(e -> {
+			Item item = combo.getValue();
+			if(item != null)SystemRegistry.Event().addEvent(new StoryListUpdate(item.getId(),item.getTitle(),true));
+			else {
+				Alert alert = new Alert(AlertType.ERROR,"漫画が選択されていません");
+				alert.showAndWait();
+			};
+			});
+		
+		//------------------------------------------------------ダウンロードボタン
+		downloadbt.setOnAction(this::Download);
 		
 	}
 	
+	/**
+	 * <h1>Download</h1>
+	 * ダウンロード実行<br>
+	 * @param e
+	 */
+	private void Download(ActionEvent e) {
+		List<StoryItem> dllist = new ArrayList<>();
+		SystemRegistry.StoryList().forEach(o -> {
+			if(o.isSelect() == true) {
+				dllist.add(o);
+			}
+		});
+		if(dllist.size() == 0)return;
+		dllist.sort(this::comparat);
+		//------------------------------------------------------漫画フォルダが存在しているかのチェック
+		File comicFile = new File(SystemRegistry.Config().getProperty(Config.MAINDIRPATH));
+		Client.FileCheck(comicFile, false, true);
 
+		dllist.forEach(o -> {
+			SystemRegistry.Event().addEvent(new item.Download(o,combo.getValue()));
+			SystemRegistry.Event().addEvent(new item.HTMLBuild(o,combo.getValue()));
+		});
+		
+		dllist.forEach(o -> {
+			SystemRegistry.Event().addEvent(new item.HTMLBuild(o,combo.getValue()));
+		});
+	}
+	
 	/**
 	 * <h1>ComicSelect</h1>
 	 * <br>
 	 */
-	private void ComicSelect() {
+	public void ComicSelect() {
 		Item select = combo.getValue();
 		System.out.println("Select:"+select.toString()+"="+select.getId());
 		if(select.isAddingItem()) {
@@ -302,5 +343,25 @@ public class MainController implements Initializable{
 	 * パターン
 	 */
 	public static Pattern pattern = Pattern.compile("\\A[0-9]+\\z");
+	
+	
+	
+	/**
+	 * <h1>comparat</h1>
+	 * ソート用メソッド<br>
+	 * @param o1
+	 * @param o2
+	 * @return
+	 */
+	private int comparat(StoryItem o1,StoryItem o2) {
+		if(o1.getIndex() < o2.getIndex()) {
+			return -1;
+		}
+		if(o1.getIndex() > o2.getIndex()) {
+			return 1;
+		}
+		return 0;
+	}
+	
 }
 
