@@ -358,8 +358,22 @@ public class Client {
 		}
 		return true;
 	}
-
-
+	
+	/**
+	 * <h1>alert</h1>
+	 * アラートの表示<br>
+	 * @param title
+	 */
+	public static void alert(String title,String msge) {
+		Platform.runLater(() -> {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setResizable(true);
+			DialogPane pane = alert.getDialogPane();
+			pane.setHeaderText(title);
+			pane.setContentText(msge);
+			alert.showAndWait();
+		});
+	}
 	
 	
 }

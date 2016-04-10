@@ -99,7 +99,7 @@ public class SystemRegistry {
 	 * <br>
 	 * @return
 	 */
-	public static Event Event() {
+	public synchronized static Event Event() {
 		return event;
 	}
 	

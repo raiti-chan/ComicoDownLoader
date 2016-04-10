@@ -72,6 +72,7 @@ public class EventRunning implements Runnable{
 	 */
 	private synchronized void mainLoop() {
 		if(SystemRegistry.Event().getList().size() != 0){
+			MainController.client.ListUP();
 			SystemRegistry.Event().run();
 			SystemRegistry.Event().getList().remove(0);
 			MainController.client.ListUP();

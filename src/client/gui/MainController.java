@@ -17,6 +17,8 @@ import client.System.SystemRegistry;
 import client.System.Registry.Config;
 import item.StoryItem;
 import item.StoryListUpdate;
+import item.TitlePageUp;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -145,7 +147,8 @@ public class MainController implements Initializable{
 	 * リストが最新順だとfalse
 	 */
 	private boolean listreverse = false;
-
+	
+	private StringBuffer buffer;
 	
 	//------------------------------------------------------code
 	/**<h1>initialize</h1>
@@ -155,11 +158,15 @@ public class MainController implements Initializable{
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		buffer = new StringBuffer();
 		ByteArrayOutputStream out = new ByteArrayOutputStream() {
 			@Override
 			public void flush() throws IOException {
-				//TODO : logOut.appendText(toString());
+				buffer.append(toString());
 				reset();
+				Platform.runLater(() ->{
+					textUp();
+				});
 			}
 		};
 		Client.setPrintStream(out);
@@ -174,7 +181,9 @@ public class MainController implements Initializable{
 		});
 		
 		//------------------------------------------------------LogClearボタン
-		clsbt.setOnAction(e -> logOut.setText(""));
+		clsbt.setOnAction(e -> {
+			logOut.setText("");
+		});
 		//------------------------------------------------------全チェックボタン
 		allCheck.setOnAction(e -> allCheck(true));
 		//------------------------------------------------------全非チェックボタン
@@ -198,7 +207,16 @@ public class MainController implements Initializable{
 		
 		//------------------------------------------------------ダウンロードボタン
 		downloadbt.setOnAction(this::Download);
+		//------------------------------------------------------HTMLBuildボタン
+		htmlBuildbt.setOnAction(this::HtmlBuild);
 		
+		titleUp.setOnAction(this::titleUp);
+		
+	}
+	
+	private void textUp() {
+		logOut.appendText(buffer.toString());
+		buffer.delete(0, buffer.length());
 	}
 	
 	/**
@@ -227,6 +245,38 @@ public class MainController implements Initializable{
 		dllist.forEach(o -> {
 			SystemRegistry.Event().addEvent(new item.HTMLBuild(o,combo.getValue()));
 		});
+	}
+	
+	/**
+	 * <h1>HtmlBuild</h1>
+	 * HTMLビルドボタン<br>
+	 * @param e
+	 */
+	private void HtmlBuild(ActionEvent e) {
+		List<StoryItem> dllist = new ArrayList<>();
+		SystemRegistry.StoryList().forEach(o ->{
+			if(o.isSelect() == true) {
+				dllist.add(o);
+			}
+		});
+		if(dllist.size() == 0)return;
+		dllist.sort(this::comparat);
+		//------------------------------------------------------漫画フォルダが存在しているかのチェック
+		File comicFile = new File(SystemRegistry.Config().getProperty(Config.MAINDIRPATH));
+		Client.FileCheck(comicFile, false, true);
+		dllist.forEach(o -> {
+			SystemRegistry.Event().addEvent(new item.HTMLBuild(o,combo.getValue()));
+		});
+	}
+	
+	/**
+	 * <h1>titleUp</h1>
+	 * タイトルページ更新<br>
+	 * @param e
+	 */
+	private void titleUp(ActionEvent e) {
+		if(combo.getValue() == null) return;
+		SystemRegistry.Event().addEvent(new TitlePageUp(this.combo.getValue()));
 	}
 	
 	/**
@@ -343,8 +393,6 @@ public class MainController implements Initializable{
 	 * パターン
 	 */
 	public static Pattern pattern = Pattern.compile("\\A[0-9]+\\z");
-	
-	
 	
 	/**
 	 * <h1>comparat</h1>
